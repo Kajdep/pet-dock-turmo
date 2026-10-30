@@ -8,6 +8,9 @@ data/
 *restore-state*.json
 settings.json
 installed-mode.txt
+store-mode.txt
+store-identity.json
+*.private-identity.json
 
 # Generated binary distributions and build caches
 runtime/
@@ -19,6 +22,8 @@ tools/python312-downloads/
 tools/portable-build-work/
 *.zip
 *.msi
+*.msix
+*.msixbundle
 *.exe
 *.dll
 *.pyd

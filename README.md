@@ -40,7 +40,7 @@ The USB screen is not an ordinary HDMI/Windows secondary monitor. Pet Dock uploa
 
 ## Download and run
 
-**[0.3.0 preview: installer and portable download](https://github.com/Kajdep/pet-dock-turmo/releases/tag/v0.3.0)** introduces the screen designer and simpler installation. It is marked pre-release pending Windows installer/device confirmation. The **[0.2.1 stable release](https://github.com/Kajdep/pet-dock-turmo/releases/tag/v0.2.1)** remains available.
+**[0.3.0 preview: installer and portable download](https://github.com/Kajdep/pet-dock-turmo/releases/tag/v0.3.0)** introduces the screen designer and simpler installation. The project owner has reported a successful Windows test; the downloads remain unsigned and marked pre-release. This does not establish compatibility with every device or Windows setup. The **[0.2.1 stable release](https://github.com/Kajdep/pet-dock-turmo/releases/tag/v0.2.1)** remains available.
 
 **Easiest:** run `Pet-Dock-Setup-v0.3.0.exe`, then open **Pet Dock** from the Start menu. It installs for the current user without administrator privileges, driver changes, or startup registration. Close Pet Dock before installation or upgrades.
 
@@ -57,6 +57,12 @@ The USB screen is not an ordinary HDMI/Windows secondary monitor. Pet Dock uploa
 9. Use **Design** to customize the screen. Changes preview live and are saved locally.
 
 Windows may warn about unsigned downloaded software. Only use artifacts from a source you trust; do not disable system security protections just to run this program.
+
+### Microsoft Store packaging
+
+A [Store-only MSIX build recipe](store/README.md) is available for certification preparation. It uses separate per-package user storage and keeps the existing portable/installer behavior unchanged. The initial Store package version is `1.0.0.0`, while the app remains `0.3.0`. This is not a live Store listing or a certified release.
+
+Microsoft signs MSIX/AppX packages distributed through the Store after approval; it does not sign the existing EXE or ZIP downloads. The unsigned MSIX upload is not a public sideload installer. See the [app privacy policy](PRIVACY.md) and test the packaged app on Windows before submission.
 
 ### Customize the screen
 
@@ -97,6 +103,8 @@ Off-screen pet placement is **experimental**. Some host applications stop render
 ## Privacy
 
 Normal operation is local. Pet Dock does not read chat history, extract pet assets, send screenshots or telemetry to a server, or require credentials. Optional GPU collection runs a local subprocess. Building the portable runtime downloads Python and dependencies; that is separate from app operation.
+
+The full [privacy policy](PRIVACY.md) also covers Store-mode storage and deliberate diagnostic sharing.
 
 Portable/source mode creates an ignored **`data/`** folder beside the application. Installed mode stores settings, logs, recovery state, and imported assets under **`%LOCALAPPDATA%\PetDock`**, outside the program directory. Updates and uninstall retain this personal data. User-requested diagnostics can include window titles, process names, USB serial/instance IDs, driver details, and local paths. **Inspect and redact these before sharing.** Nothing is uploaded automatically.
 
