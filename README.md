@@ -8,8 +8,6 @@ Pet Dock captures the actual floating pet window and mirrors its visuals to the 
 
 **[View the TURMO item on Temu](https://temu.to/k/ptvlxtaxo3l)**
 
-**Coupon price [$14.98].** This promotional price was supplied for the shared link. Coupon eligibility, availability, shipping, taxes, and the final checkout price may vary. Check the listing before purchasing. The product link is an example hardware listing, not a guarantee that every unit uses the same USB protocol.
-
 This is an independent open-source project, not an official OpenAI, TURMO, or Temu product.
 
 ## Features
