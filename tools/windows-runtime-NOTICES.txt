@@ -1,0 +1,193 @@
+Pet Dock Windows launcher and installer notices
+===============================================
+
+This notice covers only the generated `PetDock.exe` launcher and the NSIS
+installer executable. It does not replace the runtime component provenance or
+third-party notices supplied with the embedded Python runtime.
+
+No compiler, linker, NSIS build tool, or MinGW development file is distributed
+with Pet Dock. The source needed to reproduce the launcher and installer is in
+`tools/windows_launcher.c`, `tools/installer.nsi`, and
+`tools/build_installer.py`.
+
+MinGW-w64 runtime
+-----------------
+
+The x64 launcher is built with the MinGW-w64 win32 toolchain and statically
+links MinGW-w64 CRT/startup code as selected by the linker. The installed
+build package used for this release is `mingw-w64` 11.0.1-3build1. Its package
+copyright file identifies the following general notice for the MinGW-w64
+project:
+
+    Copyright: 2009-2016 the mingw-w64 project
+    License: ZPL-2.1
+
+The ZPL-2.1 terms reproduced by that package are:
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+
+       1. Redistributions in source code must retain the accompanying
+          copyright notice, this list of conditions, and the following
+          disclaimer.
+       2. Redistributions in binary form must reproduce the accompanying
+          copyright notice, this list of conditions, and the following
+          disclaimer in the documentation and/or other materials provided
+          with the distribution.
+       3. Names of the copyright holders must not be used to endorse or
+          promote products derived from this software without prior
+          written permission from the copyright holders.
+       4. The right to distribute this software or to use it for any
+          purpose does not give you the right to use Servicemarks (sm) or
+          Trademarks (tm) of the copyright holders. Use of them is
+          covered by separate agreement with the copyright holders.
+       5. If any files are modified, you must cause the modified files to
+          carry prominent notices stating that you changed the files and
+          the date of any change.
+
+    Disclaimer
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
+    EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+    PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+    BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+    WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+    OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+    EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+The MinGW-w64 source and its complete file-level copyright inventory are
+available at https://github.com/mingw-w64/mingw-w64 .
+
+GCC runtime library exception
+-----------------------------
+
+The launcher is linked with `-static-libgcc`. The build package
+`gcc-mingw-w64-x86-64-win32-runtime` 13.2.0-6ubuntu1+26.1 identifies libgcc as
+GPLv3-or-later with the GCC Runtime Library Exception, version 3.1. Pet Dock's
+own GPL-3.0-or-later license text is supplied in `LICENSE`.
+
+GCC Runtime Library Exception
+Version 3.1, 31 March 2009
+Copyright (C) 2009 Free Software Foundation, Inc. <http://fsf.org/>
+Everyone is permitted to copy and distribute verbatim copies of this license
+document, but changing it is not allowed.
+
+This GCC Runtime Library Exception ("Exception") is an additional permission
+under section 7 of the GNU General Public License, version 3 ("GPLv3"). It
+applies to a given file (the "Runtime Library") that bears a notice placed by
+the copyright holder of the file stating that the file is governed by GPLv3
+along with this Exception.
+
+When you use GCC to compile a program, GCC may combine portions of certain GCC
+header files and runtime libraries with the compiled program. The purpose of
+this Exception is to allow compilation of non-GPL (including proprietary)
+programs to use, in this way, the header files and runtime libraries covered by
+this Exception.
+
+0. Definitions.
+
+A file is an "Independent Module" if it either requires the Runtime Library
+for execution after a Compilation Process, or makes use of an interface
+provided by the Runtime Library, but is not otherwise based on the Runtime
+Library.
+
+"GCC" means a version of the GNU Compiler Collection, with or without
+modifications, governed by version 3 (or a specified later version) of the GNU
+General Public License (GPL) with the option of using any subsequent versions
+published by the FSF.
+
+"GPL-compatible Software" is software whose conditions of propagation,
+modification and use would permit combination with GCC in accord with the
+license of GCC.
+
+"Target Code" refers to output from any compiler for a real or virtual target
+processor architecture, in executable form or suitable for input to an
+assembler, loader, linker and/or execution phase. Notwithstanding that, Target
+Code does not include data in any format that is used as a compiler intermediate
+representation, or used for producing a compiler intermediate representation.
+
+The "Compilation Process" transforms code entirely represented in
+non-intermediate languages designed for human-written code, and/or in Java
+Virtual Machine byte code, into Target Code. Thus, for example, use of source
+code generators and preprocessors need not be considered part of the
+Compilation Process, since the Compilation Process can be understood as
+starting with the output of the generators or preprocessors.
+
+A Compilation Process is "Eligible" if it is done using GCC, alone or with
+other GPL-compatible software, or if it is done without using any work based on
+GCC. For example, using non-GPL-compatible Software to optimize any GCC
+intermediate representations would not qualify as an Eligible Compilation
+Process.
+
+1. Grant of Additional Permission.
+
+You have permission to propagate a work of Target Code formed by combining the
+Runtime Library with Independent Modules, even if such propagation would
+otherwise violate the terms of GPLv3, provided that all Target Code was
+generated by Eligible Compilation Processes. You may then convey such a
+combination under terms of your choice, consistent with the licensing of the
+Independent Modules.
+
+2. No Weakening of GCC Copyleft.
+
+The availability of this Exception does not imply any general presumption that
+third-party software is unaffected by the copyleft requirements of the license
+of GCC.
+
+The GCC sources are available from https://gcc.gnu.org/releases.html .
+
+NSIS installer stub
+-------------------
+
+The installer executable is produced by NSIS 3.09. The NSIS compiler is a build
+tool and is not distributed. The generated installer includes the NSIS stub.
+The installed NSIS package identifies the core notice as:
+
+    Copyright: 2003-2021, NSIS Contributors
+      1995-2003, Mark Adler
+      1998-2005, Gilles Vollant
+      1999-2000, 2002, Aladdin Enterprises.
+      1999-2021, Nullsoft and Contributors
+      1999-2021, Nullsoft, Jeff Doozan and Contributors
+      2001, Michael Bishop
+      2001-2002, Yaroslav Faybishenko & Justin Frankel
+      2002, Robert Rainwater
+      2002-2021, Amir Szekely <kichik@netvision.net.il> and Contributors
+      2002-2021, Amir Szekely <kichik@users.sourceforge.net>
+      2002-2021, Joost Verburg
+      2003-2021, Amir Szekely, Joost Verburg, Dave Laundon
+      2003, Ramon
+      2003, Sunil Kamath
+      2007-2021, Jim Park
+      2011-2021, Anders Kjersem
+      Nik Medved
+    License: Zlib
+
+The zlib license terms reproduced by the NSIS package are:
+
+    This software is provided 'as-is', without any express or implied
+    warranty.  In no event will the authors be held liable for any damages
+    arising from the use of this software.
+
+    Permission is granted to anyone to use this software for any purpose,
+    including commercial applications, and to alter it and redistribute it
+    freely, subject to the following restrictions:
+
+    1. The origin of this software must not be misrepresented; you must not
+       claim that you wrote the original software. If you use this software
+       in a product, an acknowledgment in the product documentation would be
+       appreciated but is not required.
+    2. Altered source versions must be plainly marked as such, and must not
+       be misrepresented as being the original software.
+    3. This notice may not be removed or altered from any source distribution.
+
+The installer uses NSIS's LZMA compressor. The NSIS package attributes
+`Source/7zip/*` to Igor Pavlov (1999-2006) and Amir Szekely (2003-2021) under
+its listed LZMA Common Public License exception. Source and the complete
+license inventory are available from
+https://sourceforge.net/projects/nsis/files/NSIS%203/ .

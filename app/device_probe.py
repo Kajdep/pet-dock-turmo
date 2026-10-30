@@ -17,9 +17,10 @@ import traceback
 from PIL import Image, ImageDraw
 from serial.tools import list_ports
 from display_io import DisplayConnection
+from app_paths import data_directory
 
 BASE = Path(__file__).resolve().parent.parent
-DATA = BASE / 'data'
+DATA = data_directory()
 
 
 def _registry_device_info():
@@ -180,7 +181,7 @@ def main():
     parser.add_argument('--revision', choices=['A', 'B'], default='A')
     parser.add_argument('--orientation', choices=['Portrait', 'Landscape', 'Reverse portrait', 'Reverse landscape'], default='Portrait')
     args = parser.parse_args()
-    DATA.mkdir(exist_ok=True)
+    DATA.mkdir(parents=True, exist_ok=True)
     report = collect_device_info()
     print(json.dumps(report, indent=2), flush=True)
     if args.benchmark:

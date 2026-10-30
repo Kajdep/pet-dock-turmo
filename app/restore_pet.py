@@ -4,9 +4,10 @@ from pathlib import Path
 import sys
 import traceback
 from window_guard import DesktopPetGuard
+from app_paths import data_directory
 
 if __name__ == '__main__':
-    state = Path(__file__).resolve().parents[1] / 'data/desktop-pet-restore.json'
+    state = data_directory() / 'desktop-pet-restore.json'
     try:
         guard = DesktopPetGuard(state)
         guard.restore()

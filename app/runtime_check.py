@@ -7,7 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 print('Codex Pet · Turmo Bridge runtime check')
 print('Python:', sys.version)
 failed = False
-for name in ['tkinter', 'serial', 'PIL', 'numpy', 'cv2', 'windows_capture', 'psutil', 'sv_ttk', 'capture', 'display_io', 'framing', 'metrics', 'window_guard', 'ui_layout', 'device_probe']:
+for name in ['tkinter', 'serial', 'PIL', 'numpy', 'cv2', 'windows_capture', 'psutil', 'sv_ttk', 'capture', 'display_io', 'framing', 'metrics', 'window_guard', 'ui_layout', 'device_probe', 'screen_style', 'design_ui', 'app_paths']:
     try:
         module = __import__(name)
         print(name, 'OK', getattr(module, '__version__', ''))

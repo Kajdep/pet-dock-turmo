@@ -16,6 +16,7 @@ from tkinter import ttk
 from PIL import Image, ImageDraw
 
 import pet_bridge
+from gui_test_support import isolated_app_state
 from capture import WindowInfo
 
 
@@ -83,7 +84,7 @@ def main() -> None:
     root.withdraw()
     ports = [{"device": "COM38", "label": "COM38 · simulated", "vid": 0x1A86, "pid": 0x5722}]
     windows = [WindowInfo(123, "ChatGPT", "ChatGPT.exe", 960, 1080, True)]
-    with patch.object(pet_bridge, "list_windows", return_value=windows), patch.object(
+    with isolated_app_state(pet_bridge), patch.object(pet_bridge, "list_windows", return_value=windows), patch.object(
         pet_bridge, "list_displays", return_value=ports
     ):
         app = pet_bridge.App(root)

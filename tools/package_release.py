@@ -8,6 +8,8 @@ import hashlib
 import json
 from pathlib import Path
 import shutil
+import subprocess
+import sys
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -39,6 +41,7 @@ def main():
     for name in ['Start.cmd', 'Check-runtime.cmd', 'Probe-Turmo.cmd', 'Restore-Desktop-Pet.cmd',
                  'README.md', 'START-HERE.txt', 'LICENSE', 'THIRD_PARTY_NOTICES.md', 'requirements.txt']:
         shutil.copy2(ROOT/name, stage/name)
+    shutil.copy2(ROOT/'tools/windows-runtime-NOTICES.txt', stage/'windows-runtime-NOTICES.txt')
     # Keep exact dependency source/license/hash provenance, not host pip reports.
     component_file = stage/'runtime/COMPONENTS.json'
     if not component_file.is_file():
@@ -63,6 +66,8 @@ def main():
     for path in stage.glob('*.cmd'):
         text = path.read_text(encoding='utf-8')
         path.write_bytes(text.replace('\r\n','\n').replace('\n','\r\n').encode('ascii'))
+    subprocess.run([sys.executable, str(ROOT/'tools/build_installer.py'), '--launcher-only',
+                    '--stage', str(stage), '--output', str(args.output)], check=True)
     paths = sorted(p for p in stage.rglob('*') if p.is_file())
     manifest = {p.relative_to(stage).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
     (stage/'FILE-MANIFEST.json').write_text(json.dumps(manifest, indent=2)+'\n', encoding='utf-8')

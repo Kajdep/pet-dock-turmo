@@ -49,7 +49,7 @@ def build_ui(app, ImageView):
     style.configure('Card.TLabelframe', padding=10)
     style.configure('Card.TLabelframe.Label', font=('Segoe UI', 10, 'bold'))
     style.configure('Status.TLabel', font=('Segoe UI', 10))
-    style.configure('TNotebook.Tab', padding=(8, 6))
+    style.configure('TNotebook.Tab', padding=(4, 5), font=('Segoe UI', 9))
 
     outer = ttk.Frame(root, padding=18)
     outer.pack(fill='both', expand=True)
@@ -68,7 +68,7 @@ def build_ui(app, ImageView):
 
     main = ttk.Frame(outer)
     main.pack(fill='both', expand=True)
-    sidebar = ttk.Frame(main, width=360)
+    sidebar = ttk.Frame(main, width=380)
     sidebar.pack(side='left', fill='y', padx=(0, 14))
     sidebar.pack_propagate(False)
     tabs = ttk.Notebook(sidebar)
@@ -76,6 +76,8 @@ def build_ui(app, ImageView):
     pet_tab = _settings_tab(root, tabs, 'Companion')
     screen_tab = _settings_tab(root, tabs, 'Display')
     stats_tab = _settings_tab(root, tabs, 'Metrics')
+    design_tab = _settings_tab(root, tabs, 'Design')
+    app.settings_tabs = tabs
 
     ttk.Label(pet_tab, text='1  Choose your companion', style='Section.TLabel').pack(anchor='w', pady=(0, 12))
     app.source_mode = tk.StringVar(value='Window')
@@ -157,14 +159,14 @@ def build_ui(app, ImageView):
     ttk.Button(screen_tab, text='Save troubleshooting info', command=app.diagnostics).pack(fill='x')
 
     ttk.Label(stats_tab, text='Optional system metrics', style='Section.TLabel').pack(anchor='w', pady=(0, 12))
-    app.metrics_enabled = tk.BooleanVar(value=False)
+    app.metrics_enabled = tk.BooleanVar(value=bool(app.saved.get('metrics_enabled', False)))
     ttk.Checkbutton(stats_tab, text='Show metrics on the Turmo', variable=app.metrics_enabled, command=app.metrics_changed).pack(anchor='w', pady=(0, 12))
     app.metric_vars = {}
     labels = [('cpu', 'CPU utilization'), ('ram', 'RAM utilization'), ('gpu', 'GPU utilization'),
               ('gpu_temp', 'GPU temperature'), ('vram', 'GPU memory'), ('cpu_temp', 'CPU temperature'),
               ('disk', 'System drive utilization'), ('net', 'Network upload / download'), ('clock', 'CPU frequency')]
     for key, label in labels:
-        var = tk.BooleanVar(value=key in ('cpu', 'ram', 'gpu'))
+        var = tk.BooleanVar(value=key in app.saved.get('metrics_selected', ['cpu', 'ram', 'gpu']))
         app.metric_vars[key] = var
         ttk.Checkbutton(stats_tab, text=label, variable=var, command=app.metrics_changed).pack(anchor='w', pady=3)
     ttk.Label(stats_tab, text='Metrics use a compact footer and refresh once per second. GPU values currently use NVIDIA nvidia-smi. Unsupported sensors show N/A—not guessed values.', style='Hint.TLabel', wraplength=280).pack(anchor='w', pady=(12, 10))
@@ -177,9 +179,12 @@ def build_ui(app, ImageView):
     app.pet_scale.trace_add('write', size_label)
     size_label()
     ttk.Label(stats_tab, textvariable=app.pet_scale_text, style='Hint.TLabel').pack(anchor='w', pady=(5, 0))
-    ttk.Scale(stats_tab, from_=.4, to=1.0, variable=app.pet_scale, command=lambda _: app.update_render()).pack(fill='x', pady=(8, 5))
+    ttk.Scale(stats_tab, from_=.1, to=1.0, variable=app.pet_scale, command=lambda _: app.update_render()).pack(fill='x', pady=(8, 5))
     ttk.Button(stats_tab, text='Reset size to 90%', command=app.reset_pet_size).pack(fill='x', pady=(3, 8))
     ttk.Label(stats_tab, text='A smaller companion changes fewer pixels and may improve USB responsiveness.', style='Hint.TLabel', wraplength=280).pack(anchor='w')
+
+    from design_ui import ScreenDesigner
+    app.designer = ScreenDesigner(app, design_tab, app.data_dir)
 
     preview_area = ttk.Frame(main)
     preview_area.pack(side='left', fill='both', expand=True)
@@ -204,3 +209,5 @@ def build_ui(app, ImageView):
     app.lcd_view.pack(fill='both', expand=True)
     app.lcd_view.show(Image.new('RGB', (320, 480), '#10141b'))
     app.update_render()
+    if app.metrics_enabled.get():
+        app.metrics_changed()

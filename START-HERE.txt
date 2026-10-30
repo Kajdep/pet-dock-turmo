@@ -1,31 +1,58 @@
-PET DOCK - LIVE DESKTOP PET ON A COMPATIBLE TURMO USB DISPLAY
+PET DOCK 0.3.0 PREVIEW - LIVE PET ON A COMPATIBLE TURMO DISPLAY
 Windows 10/11 x64
 
-Extract the entire portable ZIP into a writable folder.
-Close Formbig/Turmo and other display controllers.
-Open Start.cmd beside the app and runtime folders.
+EASIEST INSTALL
+Run the Setup.exe from the 0.3.0 GitHub Release. It installs for your
+Windows user without admin rights, drivers, or startup registration.
+Open Pet Dock from the Start menu. Close Pet Dock before upgrading.
+The installer is unsigned; Windows may warn. Do not disable protection.
 
+PORTABLE OPTION
+Extract the entire portable ZIP to a writable folder.
+Open PetDock.exe (or Start.cmd) beside the app and runtime folders.
+No separate Python install is needed for either download.
+
+QUICK START
+Close Formbig/Turmo and other display controllers first.
 1. Enable the floating pet in its host application.
 2. Companion: select its transparent window and Capture preview.
 3. Confirm the previews; drag on Source to override the crop if needed.
 4. Display: select the COM device, Protocol A, and orientation.
 5. Send the test pattern, then Start screen.
 6. Metrics: optionally select readings. Unsupported sensors show N/A.
+7. Design: choose your background, palette, colors, font, Cards/Bars/Rings,
+   panel opacity and placement, and pet size and position. Changes preview
+   live and save locally. No image, font, or theme is uploaded.
+
+Backgrounds show through transparent native pet capture. Desktop-area
+capture and Ignore alpha stay opaque. Contain preserves the whole image;
+Cover intentionally crops its edges. Images are copied without metadata.
+Fonts change stats, not the captured pet or its bubble. Text shrinks to
+fit small cards. Missing fonts/images fall back safely.
 
 Orientation applies live between transfers, with a full redraw.
-Metrics off restores the full pet area. Fit visible pet removes empty
-transparent padding inside the crop. Size has a 90% reset button.
-FPS is a target, not a guarantee. Large images increase USB work.
+Metrics off restores the full pet area without changing your crop/size.
+Percent and VRAM gauges use the measured range. Temperature gauges use
+0 to the selected maximum Celsius value. Network/clock stay text.
+FPS is a target; more/larger changed pixels increase USB transfer work.
 
-Off-screen pet placement is experimental. Restore desktop pet brings it
-back. Emergency: Restore-Desktop-Pet.cmd. Do not delete the recovery file
-while the pet is off-screen. Some host apps stop rendering off-screen.
+DATA AND RECOVERY
+Portable state: data/ beside PetDock.exe.
+Installed state: %LOCALAPPDATA%\PetDock (retained on uninstall/upgrades).
+To move portable settings to installed mode, close both copies and copy
+contents of old data/ into %LOCALAPPDATA%\PetDock, including assets/.
+Do not copy a live desktop-pet-restore.json; restore the pet first.
+Uninstall does not delete personal backgrounds, fonts, settings, or logs.
 
-Check-runtime.cmd checks the portable runtime.
-Probe-Turmo.cmd: I inspects without LCD writes; B shows benchmark images.
-Logs/settings/reports are local in data/. Inspect and redact diagnostics
-before sharing. No screenshots, telemetry, or reports are uploaded.
+Off-screen placement is experimental. Restore desktop pet brings it back.
+Emergency: Restore-Desktop-Pet.cmd. Do not delete recovery state while the
+pet is off-screen. Some host apps stop rendering outside the desktop.
+Check-runtime.cmd checks dependencies. Probe-Turmo.cmd inspects the device
+or, optionally, displays benchmark images. Inspect/redact reports before
+sharing. No telemetry or diagnostics are automatically uploaded.
 
-A source checkout has no runtime: install requirements and run
-python app/pet_bridge.py instead. See README.md for complete instructions.
+This is a preview: Windows installer and physical hardware testing still
+need confirmation. The older 0.2.1 stable release remains available.
+Source checkout: install requirements, then python app/pet_bridge.py.
 Source and releases: https://github.com/Kajdep/pet-dock-turmo
+See README.md for complete build, privacy, and compatibility details.

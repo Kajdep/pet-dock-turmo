@@ -22,11 +22,13 @@ from display_io import DisplayConnection, list_displays
 from framing import detect_content_crop, CropTracker
 from metrics import MetricCollector, metrics_panel_height, render_metrics_panel
 from window_guard import DesktopPetGuard
+from app_paths import data_directory
+from screen_style import normalize_style, render_background, asset_path
 
-VERSION = '0.2.1'
+VERSION = '0.3.0'
 BASE = Path(__file__).resolve().parent.parent
-DATA = BASE / 'data'
-DATA.mkdir(exist_ok=True)
+DATA = data_directory()
+DATA.mkdir(parents=True, exist_ok=True)
 logging.basicConfig(filename=DATA / 'bridge.log', level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(message)s')
 
@@ -36,11 +38,15 @@ def output_size(orientation):
 
 
 def compose_output(image, size, settings):
+    style = normalize_style(settings.get('design'))
+    # Old callers without a design retain their solid background setting.
+    if 'design' not in settings:
+        style = normalize_style(dict(style, background_color=settings.get('background', '#10141b')))
     selected = settings.get('metrics_selected', [])
-    panel_height = metrics_panel_height(size, selected)
+    panel_height = metrics_panel_height(size, selected, style=style)
     w, h = size
     pet_height = max(1, h-panel_height)
-    scale = min(1.0, max(.4, float(settings.get('pet_scale', .9))))
+    scale = min(1.0, max(.1, float(settings.get('pet_scale', .9))))
     fit_size = (max(1, round(w*scale)), max(1, round(pet_height*scale)))
     source = crop_frame(image, settings.get('crop'))
     if settings.get('fit_visible', True) and not settings.get('ignore_alpha', False):
@@ -49,16 +55,24 @@ def compose_output(image, size, settings):
         if bounds is not None:
             l, t, r, b = bounds
             source = source.crop((max(0, l-2), max(0, t-2), min(source.width, r+2), min(source.height, b+2)))
-    pet = compose_frame(source, fit_size,
-                        ignore_alpha=settings.get('ignore_alpha', False),
-                        background=settings.get('background', '#10141b'),
-                        pixel_art=settings.get('pixel_art', False))
-    output = Image.new('RGB', size, settings.get('background', '#10141b'))
-    output.paste(pet, ((w-pet.width)//2, (pet_height-pet.height)//2))
+    source = source.convert('RGBA')
+    if settings.get('ignore_alpha', False):
+        source.putalpha(255)
+    ratio = min(fit_size[0]/source.width, fit_size[1]/source.height)
+    pet = source.resize((max(1, round(source.width*ratio)), max(1, round(source.height*ratio))),
+                        Image.Resampling.NEAREST if settings.get('pixel_art', False) else Image.Resampling.LANCZOS)
+    data_dir = Path(settings.get('asset_dir', DATA))
+    output = render_background(size, style, data_dir).convert('RGBA')
+    stage_top = panel_height if style['metrics_position'] == 'Top' else 0
+    x = round((w-pet.width)*style['pet_x'])
+    y = stage_top + round((pet_height-pet.height)*style['pet_y'])
+    output.alpha_composite(pet, (x, y))
     if panel_height:
-        panel = render_metrics_panel(size, settings.get('metrics_values', {}), selected)
-        output.paste(panel, (0, h-panel_height))
-    return output
+        font = asset_path(data_dir, style['font_path']) if style['font_family'] == 'Custom' else None
+        panel = render_metrics_panel(size, settings.get('metrics_values', {}), selected,
+                                     font_path=str(font) if font else None, style=style)
+        output.alpha_composite(panel.convert('RGBA'), (0, 0 if style['metrics_position'] == 'Top' else h-panel_height))
+    return output.convert('RGB')
 
 
 class ImageView(ttk.Frame):
@@ -150,6 +164,7 @@ class ImageView(ttk.Frame):
 class App:
     def __init__(self, root):
         self.root = root
+        self.data_dir = DATA
         self.root.title(f'Pet Dock {VERSION} · Turmo')
         self.root.geometry('1080x800')
         self.root.minsize(950, 730)
@@ -203,7 +218,7 @@ class App:
         logging.error('UI error', exc_info=(typ, value, tb))
         if self.desktop_guard.hidden:
             self.restore_desktop_pet()
-        messagebox.showerror('Bridge error', f'{value}\n\nDetails are in data\\bridge.log.')
+        messagebox.showerror('Bridge error', f'{value}\n\nDetails: {DATA / "bridge.log"}')
 
     def status_message(self, text):
         self.status.set(text)
@@ -395,6 +410,8 @@ class App:
                                     'pixel_art': self.pixel_art.get(), 'background': '#10141b',
                                     'pet_scale': self.pet_scale.get(),
                                     'fit_visible': self.fit_visible.get(), 'orientation': self.orientation.get(),
+                                    'design': self.designer.settings() if hasattr(self, 'designer') else normalize_style(),
+                                    'asset_dir': str(DATA),
                                     'metrics_selected': [key for key, var in self.metric_vars.items() if self.metrics_enabled.get() and var.get()],
                                     'metrics_values': dict(self.metric_values)}
             self.settings_generation += 1
@@ -570,7 +587,8 @@ class App:
                         previous_key = None
                         self.events.put(('status', f'Orientation applied: {wanted_orientation} · {size[0]}×{size[1]} · full redraw'))
                     key = (sequence, generation)
-                    layout = (wanted_orientation, tuple(settings.get('metrics_selected', [])), settings.get('fit_visible', True))
+                    layout = (wanted_orientation, tuple(settings.get('metrics_selected', [])), settings.get('fit_visible', True),
+                              json.dumps(settings.get('design', {}), sort_keys=True))
                     if image is not None and key != previous_key:
                         if layout != previous_layout:
                             connection.request_full_redraw()
@@ -699,7 +717,10 @@ class App:
                      'brightness': self.brightness.get(), 'fps': self.fps.get(), 'pixel_art': self.pixel_art.get(),
                      'framing': self.frame_mode.get(), 'zoom_source': self.zoom_source.get(),
                      'hide_border': self.hide_border.get(), 'compatible_pacing': self.compatible_pacing.get(),
-                     'pet_scale': self.pet_scale.get(), 'fit_visible': self.fit_visible.get()}
+                     'pet_scale': self.pet_scale.get(), 'fit_visible': self.fit_visible.get(),
+                     'design': self.designer.settings() if hasattr(self, 'designer') else normalize_style(),
+                     'metrics_enabled': self.metrics_enabled.get(),
+                     'metrics_selected': [key for key, var in self.metric_vars.items() if var.get()]}
             (DATA / 'settings.json').write_text(json.dumps(saved, indent=2) + '\n', encoding='utf-8')
         except Exception:
             logging.exception('Save settings')

@@ -7,6 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "app"))
 import tkinter as tk
 from PIL import Image
 import pet_bridge
+from gui_test_support import isolated_app_state
 from capture import WindowInfo
 
 
@@ -55,7 +56,7 @@ def pump(root, predicate):
 root = tk.Tk()
 ports = [{'device':'COM38','label':'COM38 test','vid':0x1a86,'pid':0x5722}]
 windows = [WindowInfo(123,'ChatGPT','ChatGPT.exe',880,1080,True)]
-with patch.object(pet_bridge,'list_windows',return_value=windows), patch.object(pet_bridge,'list_displays',return_value=ports), patch.object(pet_bridge,'DisplayConnection',FakeConnection):
+with isolated_app_state(pet_bridge), patch.object(pet_bridge,'list_windows',return_value=windows), patch.object(pet_bridge,'list_displays',return_value=ports), patch.object(pet_bridge,'DisplayConnection',FakeConnection):
     app = pet_bridge.App(root)
     source = Image.new('RGBA',(880,1080),(0,0,0,0))
     source.paste(Image.new('RGBA',(30,100),'#d09b70'),(700,820))

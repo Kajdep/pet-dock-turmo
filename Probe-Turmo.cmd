@@ -21,6 +21,8 @@ goto done
 "%~dp0runtime\python.exe" "%~dp0app\device_probe.py" --benchmark --revision A --orientation Portrait
 :done
 echo.
-echo Results: data\turmo-device-report.json
+set "DATA=%~dp0data"
+if exist "%~dp0installed-mode.txt" set "DATA=%LOCALAPPDATA%\PetDock"
+echo Results: "%DATA%\turmo-device-report.json"
 pause
 endlocal

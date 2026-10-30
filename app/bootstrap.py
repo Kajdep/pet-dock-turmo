@@ -5,11 +5,12 @@ import ctypes
 import os
 import sys
 import traceback
+from app_paths import data_directory
 
 base = Path(__file__).resolve().parent.parent
-data = base / 'data'
+data = data_directory()
 try:
-    data.mkdir(exist_ok=True)
+    data.mkdir(parents=True, exist_ok=True)
     os.chdir(base)
     log = open(data / 'console.log', 'a', encoding='utf-8', buffering=1)
     sys.stdout = log

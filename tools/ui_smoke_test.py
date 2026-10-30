@@ -7,12 +7,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "app"))
 import tkinter as tk
 from PIL import Image, ImageGrab
 import pet_bridge
+from gui_test_support import isolated_app_state
 from capture import WindowInfo
 
 root = tk.Tk()
 ports = [{'device': 'COM7', 'label': 'COM7 · USB 1A86:5722', 'vid': 0x1A86, 'pid': 0x5722, 'serial_number': 'USB35INCHIPSV2'}]
 windows = [WindowInfo(123, 'Codex', 'Codex.exe', 760, 440, True)]
-with patch.object(pet_bridge, 'list_windows', return_value=windows), patch.object(pet_bridge, 'list_displays', return_value=ports):
+with isolated_app_state(pet_bridge), patch.object(pet_bridge, 'list_windows', return_value=windows), patch.object(pet_bridge, 'list_displays', return_value=ports):
     app = pet_bridge.App(root)
     app.orientation.set('Landscape')
     app.orientation_changed()
