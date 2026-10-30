@@ -4,7 +4,7 @@ from pathlib import Path
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
-CANDIDATES = [ROOT / 'runtime', ROOT / 'portable/runtime', ROOT / 'build/Pet-Dock-Turmo/runtime']
+CANDIDATES = [ROOT / 'runtime', ROOT / 'build/Pet-Dock-Turmo/runtime', ROOT / 'portable/runtime']
 RUNTIME = next((p for p in CANDIDATES if (p / 'python312._pth').is_file()), CANDIDATES[0])
 
 
@@ -27,6 +27,8 @@ class PortablePathTests(unittest.TestCase):
 
     def test_site_packages_and_app_also_resolve(self):
         self.assertIsNotNone(PathFinder.find_spec('serial', import_paths()))
+        if not (RUNTIME.parent / 'app').is_dir():
+            self.skipTest('Package the intermediate runtime beside app to check release app imports')
         self.assertIsNotNone(PathFinder.find_spec('capture', import_paths()))
         self.assertIsNotNone(PathFinder.find_spec('pet_bridge', import_paths()))
 
