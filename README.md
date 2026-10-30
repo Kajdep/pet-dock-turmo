@@ -1,5 +1,9 @@
 # Pet Dock for TURMO
 
+<p align="center">
+  <img src="https://github.com/Kajdep/pet-dock-turmo/blob/main/pethero.png?raw=true" alt="Pet Dock Hero Image" width="100%">
+</p>
+
 A small, local Windows companion app that gives your **live Codex / ChatGPT desktop pet** a home on a compatible TURMO USB screen.
 
 Pet Dock captures the actual floating pet window and mirrors its visuals to the display. The pet's behavior stays in its original app; Pet Dock does not replace its personality, inspect conversations, or require an API key.
