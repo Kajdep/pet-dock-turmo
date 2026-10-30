@@ -1,0 +1,42 @@
+# User-created private state and diagnostics
+data/
+.env
+.env.*
+*.log
+*device-report*.json
+*diagnostics*.json
+*restore-state*.json
+settings.json
+
+# Generated binary distributions and build caches
+runtime/
+portable/
+build/
+dist/
+release/
+tools/python312-downloads/
+tools/portable-build-work/
+*.zip
+*.msi
+*.exe
+*.dll
+*.pyd
+*.sys
+
+# Python / editor caches
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local test captures, never repository assets
+ui-smoke.png
+test-results.txt
+probe-smoke.txt

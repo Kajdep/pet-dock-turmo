@@ -1,0 +1,31 @@
+PET DOCK - LIVE DESKTOP PET ON A COMPATIBLE TURMO USB DISPLAY
+Windows 10/11 x64
+
+Extract the entire portable ZIP into a writable folder.
+Close Formbig/Turmo and other display controllers.
+Open Start.cmd beside the app and runtime folders.
+
+1. Enable the floating pet in its host application.
+2. Companion: select its transparent window and Capture preview.
+3. Confirm the previews; drag on Source to override the crop if needed.
+4. Display: select the COM device, Protocol A, and orientation.
+5. Send the test pattern, then Start screen.
+6. Metrics: optionally select readings. Unsupported sensors show N/A.
+
+Orientation applies live between transfers, with a full redraw.
+Metrics off restores the full pet area. Fit visible pet removes empty
+transparent padding inside the crop. Size has a 90% reset button.
+FPS is a target, not a guarantee. Large images increase USB work.
+
+Off-screen pet placement is experimental. Restore desktop pet brings it
+back. Emergency: Restore-Desktop-Pet.cmd. Do not delete the recovery file
+while the pet is off-screen. Some host apps stop rendering off-screen.
+
+Check-runtime.cmd checks the portable runtime.
+Probe-Turmo.cmd: I inspects without LCD writes; B shows benchmark images.
+Logs/settings/reports are local in data/. Inspect and redact diagnostics
+before sharing. No screenshots, telemetry, or reports are uploaded.
+
+A source checkout has no runtime: install requirements and run
+python app/pet_bridge.py instead. See README.md for complete instructions.
+Source and releases: https://github.com/Kajdep/pet-dock-turmo
